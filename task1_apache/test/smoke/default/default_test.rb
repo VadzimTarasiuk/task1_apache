@@ -5,14 +5,24 @@
 # The Inspec reference, with examples and extensive documentation, can be
 # found at http://inspec.io/docs/reference/resources/
 
-unless os.windows?
-  # This is an example test, replace with your own test.
-  describe user('root'), :skip do
-    it { should exist }
-  end
+# This is an example test, replace it with your own test.
+describe package('httpd') do
+  it { should be_installed }
 end
 
-# This is an example test, replace it with your own test.
-describe port(80), :skip do
-  it { should_not be_listening }
+describe package('php') do
+  it { should be_installed }
+end
+
+describe service('httpd') do
+  it { should be_enabled }
+  it { should be_running }
+end
+
+describe command('curl -IL localhost/test.php') do
+  its('stdout') { should match /200 OK/ }
+end
+
+describe command('cat /var/www/html/test.php') do
+  its('stdout') { should match /phpinfo/ }
 end
